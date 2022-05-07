@@ -1,0 +1,72 @@
+.container {
+    margin: 0 auto;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+textarea {
+    display: block;
+    margin: 10px auto 10px;
+    padding: 10px;
+    width: 700px;
+    height: 200px;
+}
+.keyboard {
+    margin: 0 auto;
+    padding: 5px 5px 0 0;
+    width: 704px;
+    
+    background: #E5E4E2;
+    border: 1px solid #D3D3D3;
+    border-radius: 11px;
+    box-shadow: inset 0 0 10px #FAFAFA;
+    color: #FAFAFA;
+}
+.row {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 8px;
+}
+.key {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: #36454F;
+    border-radius: 3px;
+    margin-left: 6px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.key.active {
+    background: #91ff77;
+}
+.key span {
+    vertical-align: middle;
+}
+.key.Lang1 {
+    width: 100px;
+}
+.key.Tab {
+    width: 100px;
+}
+.key.ShiftLeft {
+    width: 54px;
+}
+.key.ShiftRight {
+    width: 85px;
+}
+.key.ControlLeft {
+    width: 70px;
+}
+.key.Backspace {
+    width: 100px;
+}
+.key.Space {
+    width: 220px
+}
+.key.MetaLeft {
+    width: 80px;
+}
+.key.Enter {
+    width: 85px;
+}
