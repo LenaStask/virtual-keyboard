@@ -3,7 +3,7 @@ import keys from './keys';
 const keyboardLayout = [
   ['IntlBackslash', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'NumpadSubtract', 'Equal', 'Backspace'],
   ['Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash'],
-  ['Lang1', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter'],
+  ['CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter'],
   ['ShiftLeft', 'Backquote', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'NumpadDecimal', 'Period', 'Slash', 'ArrowUp', 'ShiftRight'],
   ['ControlLeft', 'AltLeft', 'MetaLeft', 'Space', 'MetaRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'AltRight'],
 ];
@@ -71,6 +71,9 @@ let mouseDownEl = null;
 
 function updateKeys() {
   Object.entries(keys).forEach(([code, key]) => {
+    if (['Backspace', 'Tab', 'CapsLock', 'Enter', 'ShiftLeft', 'ShiftRight', 'ControlLeft', 'AltLeft', 'MetaLeft', 'MetaRight', 'AltRight'].includes(code)) {
+      return;
+    }
     const keyEl = keyboard.querySelector(`[data-code="${code}"]`);
     let character = key[language][isShift ? 'shiftKey' : 'key'];
     if (isCapsLock) {
@@ -116,33 +119,39 @@ function addEnter() {
   textarea.value += '\n';
 }
 
-function handleMouseDown(event) {
-  const keyEl = event.target.closest('.key');
+function getKeyElByEvent(event) {
+  if (event instanceof MouseEvent) {
+    return event.type === 'mousedown' ? event.target.closest('.key') : mouseDownEl;
+  }
 
+  return keyboard.querySelector(`[data-code="${event.code}"]`);
+}
+
+function handleKeyDown(event) {
+  event.preventDefault();
+
+  const keyEl = getKeyElByEvent(event);
   if (!keyEl) {
     return;
   }
 
-  mouseDownEl = keyEl;
-  mouseDownEl.classList.add('active');
+  textarea.focus();
 
-  if (keyEl.dataset.code === 'ShiftLeft' || keyEl.dataset.code === 'ShiftRight') {
-    setShift(true);
+  if (event instanceof MouseEvent) {
+    mouseDownEl = keyEl;
   }
-  if (keyEl.dataset.code === 'Lang1') {
-    isCapsLock = isCapsLock ? false : true;
-    updateKeys();
-  }
-}
+  keyEl.classList.add('active');
 
-function handleMouseUp() {
-  if (!mouseDownEl) {
-    return;
-  }
-
-  const { code } = mouseDownEl.dataset;
+  const { code } = keyEl.dataset;
   if (code === 'ShiftLeft' || code === 'ShiftRight') {
-    setShift(false);
+    setShift(true);
+  } else if (code === 'CapsLock') {
+    if (event instanceof KeyboardEvent) {
+      keyEl.classList.remove('active');
+    }
+    keyEl.classList.toggle('pressed');
+    isCapsLock = !isCapsLock;
+    updateKeys();
   } else if (code === 'Space' && isShift) {
     language = language === 'en' ? 'ru' : 'en';
     updateKeys();
@@ -152,36 +161,41 @@ function handleMouseUp() {
     addTab();
   } else if (code === 'Enter') {
     addEnter();
-  } else if (code === 'Lang1') {
-    textarea.value += '';
-  } else if (isCapsLock) {
-    textarea.value += keys[code][language]['key'].toUpperCase();
-  } else {
-    textarea.value += keys[code][language][isShift ? 'shiftKey' : 'key'];
+  } else if (code !== 'CapsLock' && code !== 'MetaLeft' && code !== 'AltLeft' && code !== 'ControlLeft' && code !== 'MetaRight' && code !== 'AltRight') {
+    let key = keys[code][language][isShift ? 'shiftKey' : 'key'];
+    if (isCapsLock) {
+      key = isShift ? key.toLowerCase() : key.toUpperCase();
+    }
+    textarea.value += key;
   }
-
-  mouseDownEl.classList.remove('active');
-  mouseDownEl = null;
 }
 
-window.addEventListener('mousedown', handleMouseDown);
-window.addEventListener('mouseup', handleMouseUp);
+function handleKeyUp(event) {
+  event.preventDefault();
 
-function handleKeyEvent(event) {
-  const keyEl = keyboard.querySelector(`[data-code="${event.code}"]`);
-
+  const keyEl = getKeyElByEvent(event);
   if (!keyEl) {
     return;
   }
 
-  if (event.type === 'keydown') {
-    keyEl.classList.add('active');
-  } else {
-    keyEl.classList.remove('active');
+  const { code } = keyEl.dataset;
+  if (code === 'ShiftLeft' || code === 'ShiftRight') {
+    setShift(false);
+  } else if (code === 'CapsLock' && event instanceof KeyboardEvent) {
+    isCapsLock = false;
+    keyEl.classList.remove('pressed');
   }
 
-  setShift(event.getModifierState('Shift'));
+  keyEl.classList.remove('active');
+  if (event instanceof MouseEvent) {
+    mouseDownEl = null;
+  }
 }
 
-window.addEventListener('keydown', handleKeyEvent);
-window.addEventListener('keyup', handleKeyEvent);
+keyboard.addEventListener('mousedown', handleKeyDown);
+window.addEventListener('mouseup', handleKeyUp);
+
+window.addEventListener('keydown', handleKeyDown);
+window.addEventListener('keyup', handleKeyUp);
+
+textarea.focus();

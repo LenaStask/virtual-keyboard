@@ -9,7 +9,7 @@ const keys = {
       shiftKey: 'Ф',
     },
   },
-  Lang1: {
+  CapsLock: {
     en: {
       key: 'Caps Lock',
       shiftKey: 'Caps Lock',

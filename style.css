@@ -37,6 +37,7 @@ textarea {
     display: inline-block;
     width: 40px;
     height: 40px;
+    line-height: 40px;
     background: #36454F;
     border-radius: 3px;
     margin-left: 6px;
@@ -44,6 +45,9 @@ textarea {
     vertical-align: middle;
     cursor: pointer;
     transition: all 150ms ease-in-out;
+}
+.key.pressed {
+    color: #91ff77;
 }
 .key:hover {
     color: #91ff77;
@@ -54,7 +58,7 @@ textarea {
 .key span {
     vertical-align: middle;
 }
-.key.Lang1 {
+.key.CapsLock{
     width: 100px;
 }
 .key.Tab {
