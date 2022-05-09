@@ -182,8 +182,9 @@ function handleKeyUp(event) {
   if (code === 'ShiftLeft' || code === 'ShiftRight') {
     setShift(false);
   } else if (code === 'CapsLock' && event instanceof KeyboardEvent) {
-    isCapsLock = false;
     keyEl.classList.remove('pressed');
+    isCapsLock = event.getModifierState('CapsLock');
+    updateKeys();
   }
 
   keyEl.classList.remove('active');
