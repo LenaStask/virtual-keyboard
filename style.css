@@ -2,7 +2,14 @@
     margin: 0 auto;
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
-
+h1 {
+    text-align: center;
+    color: #36454F;
+}
+p {
+    text-align: center;
+    color: #36454F;
+}
 textarea {
     display: block;
     margin: 10px auto 10px;
@@ -36,9 +43,13 @@ textarea {
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
+    transition: all 150ms ease-in-out;
+}
+.key:hover {
+    color: #91ff77;
 }
 .key.active {
-    background: #91ff77;
+    box-shadow: 0 0 10px 0 #91ff77 inset, 0 0 10px 4px #91ff77;
 }
 .key span {
     vertical-align: middle;

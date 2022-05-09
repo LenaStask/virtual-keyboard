@@ -10,12 +10,18 @@ const keyboardLayout = [
 
 let textarea;
 let keyboard;
+let header;
+let text1;
+let text2;
 
 let language = 'en';
 
 function render() {
   const container = document.createElement('div');
   container.classList.add('container');
+
+  header = document.createElement('h1');
+  header.innerText = 'RSS Virtual Keyboard';
 
   textarea = document.createElement('textarea');
   textarea.setAttribute('rows', 5);
@@ -24,10 +30,18 @@ function render() {
   keyboard = document.createElement('div');
   keyboard.classList.add('keyboard');
 
+  text1 = document.createElement('p');
+  text1.innerHTML = 'Клавиатура создана в операционной системе MacOS';
+  text2 = document.createElement('p');
+  text2.innerHTML = 'Для переключения языка комбинация: левый Shift + Space';
+
   document.body.appendChild(container);
 
+  container.appendChild(header);
   container.appendChild(textarea);
   container.appendChild(keyboard);
+  container.appendChild(text1);
+  container.appendChild(text2);
 }
 
 function createKey(code) {
@@ -65,6 +79,20 @@ function updateKeys() {
     keyEl.innerText = character;
   });
 }
+function setLocalStorage() {
+  localStorage.setItem('language', language);
+}
+
+window.addEventListener('beforeunload', setLocalStorage);
+
+function getLocalStorage() {
+  if (localStorage.getItem('language')) {
+    language = localStorage.getItem('language');
+    updateKeys();
+  }
+}
+
+window.addEventListener('load', getLocalStorage);
 
 function setShift(value) {
   if (isShift === value) {
