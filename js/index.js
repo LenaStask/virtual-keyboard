@@ -84,6 +84,10 @@ function addTab() {
   textarea.value += '\t';
 }
 
+function addEnter() {
+  textarea.value += '\n';
+}
+
 function handleMouseDown(event) {
   const keyEl = event.target.closest('.key');
 
@@ -96,6 +100,10 @@ function handleMouseDown(event) {
 
   if (keyEl.dataset.code === 'ShiftLeft' || keyEl.dataset.code === 'ShiftRight') {
     setShift(true);
+  }
+  if (keyEl.dataset.code === 'Lang1') {
+    isCapsLock = isCapsLock ? false : true;
+    updateKeys();
   }
 }
 
@@ -114,6 +122,12 @@ function handleMouseUp() {
     removeLastCharacter();
   } else if (code === 'Tab') {
     addTab();
+  } else if (code === 'Enter') {
+    addEnter();
+  } else if (code === 'Lang1') {
+    textarea.value += '';
+  } else if (isCapsLock) {
+    textarea.value += keys[code][language]['key'].toUpperCase();
   } else {
     textarea.value += keys[code][language][isShift ? 'shiftKey' : 'key'];
   }

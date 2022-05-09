@@ -67,6 +67,9 @@ textarea {
 .key.MetaLeft {
     width: 80px;
 }
+.key.MetaRight {
+    width: 80px;
+}
 .key.Enter {
     width: 85px;
 }
