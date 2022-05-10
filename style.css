@@ -10,6 +10,9 @@ p {
     text-align: center;
     color: #36454F;
 }
+footer {
+    text-align: center;
+}
 textarea {
     display: block;
     margin: 10px auto 10px;
